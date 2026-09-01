@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" role="img" aria-label="StandX logo">
+  <rect width="100" height="100" fill="#000"/>
+  <!-- top bar -->
+  <rect x="15" y="12" width="70" height="18" fill="#fff"/>
+  <!-- bowl (big white disc, overlaps the bar so they connect) -->
+  <circle cx="50" cy="63" r="33" fill="#fff"/>
+  <!-- counter (the hole) -->
+  <circle cx="50" cy="64" r="14" fill="#000"/>
+</svg>
