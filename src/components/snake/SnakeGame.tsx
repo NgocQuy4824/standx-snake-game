@@ -513,7 +513,14 @@ export function SnakeGame() {
   return (
     <div className="flex h-full w-full flex-col overflow-hidden">
       {/* Header */}
-      <div className="relative flex h-[96px] shrink-0 items-center justify-between bg-[#3d6b1e] px-6 select-none">
+      <div className="relative flex h-[96px] shrink-0 items-center justify-between bg-[#3d6b1e] px-6 select-none overflow-hidden">
+        {/* Running mascot — back and forth, slower */}
+        <div className="pointer-events-none absolute bottom-0 left-0 z-10 animate-[mascotRun_14s_linear_infinite]">
+          <div className="animate-[mascotFlip_14s_steps(1)_infinite]">
+            {/* eslint-disable @next/next/no-img-element */}
+            <img src="/snake/ui/mascot.svg" alt="" aria-hidden className="h-[72px] w-auto animate-[mascotBob_0.4s_ease-in-out_infinite]" />
+          </div>
+        </div>
         <div className="flex items-center gap-4">
           <div className="flex items-center gap-2">
             <span className="grid h-[34px] w-[34px] place-items-center overflow-hidden rounded-sm bg-white/10">

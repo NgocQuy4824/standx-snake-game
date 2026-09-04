@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 140" role="img" aria-label="StandX mascot">
+  <!-- leaf stem -->
+  <path d="M60 18 C60 8 68 2 78 4 C72 10 66 14 60 18Z" fill="#4a8c3f"/>
+  <!-- leaf -->
+  <ellipse cx="80" cy="6" rx="14" ry="7" fill="#5aad4a" transform="rotate(-20 80 6)"/>
+  <!-- body -->
+  <ellipse cx="60" cy="72" rx="42" ry="44" fill="#2a2a2a"/>
+  <!-- eye white -->
+  <circle cx="60" cy="62" r="24" fill="#fff"/>
+  <!-- iris -->
+  <circle cx="60" cy="62" r="14" fill="#2e6b3a"/>
+  <!-- pupil -->
+  <circle cx="60" cy="62" r="7" fill="#1a3d24"/>
+  <!-- eye highlight -->
+  <circle cx="54" cy="56" r="4" fill="#fff" opacity="0.8"/>
+  <!-- smile -->
+  <path d="M48 88 Q60 96 72 88" stroke="#fff" stroke-width="3" fill="none" stroke-linecap="round"/>
+  <!-- left arm -->
+  <ellipse cx="24" cy="80" rx="10" ry="7" fill="#2a2a2a" transform="rotate(-15 24 80)"/>
+  <!-- right arm -->
+  <ellipse cx="96" cy="80" rx="10" ry="7" fill="#2a2a2a" transform="rotate(15 96 80)"/>
+  <!-- left leg -->
+  <ellipse cx="44" cy="114" rx="9" ry="12" fill="#2a2a2a"/>
+  <!-- right leg -->
+  <ellipse cx="76" cy="114" rx="9" ry="12" fill="#2a2a2a"/>
+</svg>
