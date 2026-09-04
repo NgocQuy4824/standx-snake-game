@@ -69,6 +69,9 @@ export function SnakeGame() {
   const [isNewRecord, setIsNewRecord] = useState(false);
   const [shaking, setShaking] = useState(false);
   const [flashing, setFlashing] = useState(false);
+  const [playerName, setPlayerName] = useState("");
+  const [nameInput, setNameInput] = useState("");
+  const [started, setStarted] = useState(false);
 
   const snakeRef = useRef<Pt[]>([
     { x: 6, y: 9 },
@@ -94,7 +97,7 @@ export function SnakeGame() {
     img.onload = () => { bannerRef.current = img; };
   }, []);
 
-  // hydrate best
+  // hydrate best + player name from storage
   useEffect(() => {
     const v = Number(localStorage.getItem("snake-best") || "0");
     if (!Number.isNaN(v) && v !== 0) {
@@ -102,7 +105,20 @@ export function SnakeGame() {
       // eslint-disable-next-line react-hooks/set-state-in-effect
       setBest(v);
     }
+    const savedName = localStorage.getItem("snake-player-name");
+    if (savedName) {
+      setPlayerName(savedName);
+      setStarted(true);
+    }
   }, []);
+
+  const startGame = () => {
+    const name = nameInput.trim();
+    if (!name) return;
+    setPlayerName(name);
+    localStorage.setItem("snake-player-name", name);
+    setStarted(true);
+  };
 
   // cleanup death animation on unmount
   useEffect(() => {
@@ -401,6 +417,7 @@ export function SnakeGame() {
 
   // game loop
   useEffect(() => {
+    if (!started) return; // block game loop until name entered
     let id: ReturnType<typeof setTimeout>;
     const tick = () => {
       if (paused || gameOver || !runningRef.current) {
@@ -491,7 +508,7 @@ export function SnakeGame() {
       clearTimeout(id);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [paused, gameOver]);
+  }, [paused, gameOver, started]);
 
   // swipe
   const touchStart = useRef<{ x: number; y: number } | null>(null);
@@ -543,6 +560,11 @@ export function SnakeGame() {
         </div>
 
         <div className="flex items-center gap-2">
+          {playerName && (
+            <span className="hidden sm:inline mr-1 font-[var(--font-nunito)] text-[13px] font-bold text-white/80">
+              {playerName}
+            </span>
+          )}
           {/* Social links */}
           <div className="mr-3 flex items-center gap-1.5">
             <a
@@ -620,6 +642,39 @@ export function SnakeGame() {
           <div className="pointer-events-none absolute inset-0 z-20 animate-[flash_0.35s_ease-out_forwards] bg-red-600" />
         )}
 
+        {/* Name input screen — shown before game starts */}
+        {!started && (
+          <div className="absolute inset-0 z-40 grid place-items-center bg-black/80 backdrop-blur-sm p-4">
+            <div className="w-full max-w-[360px] rounded-[16px] bg-[#3d6b1e] p-0 text-center shadow-2xl animate-[popIn_0.4s_cubic-bezier(0.34,1.56,0.64,1)]">
+              <div className="rounded-t-[16px] bg-[#2e5216] px-6 py-5">
+                <img src="/snake/ui/mascot.svg" alt="StandX mascot" className="mx-auto h-[64px] w-auto mb-2" />
+                <h2 className="font-[var(--font-nunito)] text-[24px] font-extrabold text-white">Chào mừng!</h2>
+                <p className="mt-1 font-[var(--font-nunito)] text-[13px] text-white/70">Nhập tên của bạn để bắt đầu chơi</p>
+              </div>
+              <div className="p-6">
+                <input
+                  type="text"
+                  value={nameInput}
+                  onChange={(e) => setNameInput(e.target.value)}
+                  onKeyDown={(e) => { if (e.key === "Enter") startGame(); }}
+                  placeholder="Tên của bạn..."
+                  maxLength={20}
+                  autoFocus
+                  className="w-full rounded-[10px] border-2 border-white/20 bg-white/10 px-4 py-3 font-[var(--font-nunito)] text-[16px] font-bold text-white placeholder:text-white/40 outline-none focus:border-[#56AD1E]"
+                />
+                <button
+                  type="button"
+                  onClick={startGame}
+                  disabled={!nameInput.trim()}
+                  className="mt-4 w-full rounded-[10px] bg-[#56AD1E] py-3 font-[var(--font-nunito)] text-[16px] font-bold text-white hover:brightness-110 disabled:opacity-40 disabled:cursor-not-allowed"
+                >
+                  Bắt đầu chơi
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+
         {/* D-pad */}
         <div className="absolute bottom-2 left-1/2 flex -translate-x-1/2 gap-1 lg:hidden">
           {[
@@ -666,13 +721,13 @@ export function SnakeGame() {
         {gameOver && (
           <div className="absolute inset-0 z-30 grid place-items-center bg-black/70 p-4 animate-[fadeIn_0.3s_ease-out]">
             <div className="w-full max-w-[320px] rounded-[12px] bg-[#3d6b1e] p-0 text-center shadow-2xl animate-[popIn_0.4s_cubic-bezier(0.34,1.56,0.64,1)]">
-              {/* New record badge */}
+              {/* New record badge — inside panel so it never gets clipped */}
               {isNewRecord && (
-                <div className="absolute -top-3 left-1/2 -translate-x-1/2 rounded-full bg-yellow-400 px-4 py-1 font-[var(--font-nunito)] text-[11px] font-extrabold uppercase tracking-wider text-black shadow-lg animate-[bounce_0.6s_ease-in-out_infinite]">
+                <div className="rounded-t-[12px] bg-yellow-400 py-2 font-[var(--font-nunito)] text-[12px] font-extrabold uppercase tracking-wider text-black animate-[bounce_0.6s_ease-in-out_infinite]">
                   New Record!
                 </div>
               )}
-              <div className="rounded-t-[12px] bg-[#2e5216] px-6 py-5">
+              <div className={`${isNewRecord ? "" : "rounded-t-[12px]"} bg-[#2e5216] px-6 py-5`}>
                 <p className="font-[var(--font-nunito)] text-[13px] font-bold uppercase tracking-[0.12em] text-white/70">Game Over — StandX</p>
                 <p className="mt-1 font-[var(--font-nunito)] text-[32px] font-extrabold leading-none text-white">{score} StandX</p>
                 <p className="mt-1 font-[var(--font-nunito)] text-[12px] text-white/70">
